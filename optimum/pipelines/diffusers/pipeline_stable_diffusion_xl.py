@@ -481,6 +481,7 @@ class StableDiffusionXLPipelineMixin(DiffusionPipelineMixin):
             image = latents
         else:
             latents /= self.vae_decoder.config.get("scaling_factor", 0.18215)
+            latents = latents.astype(np.float32)
             # it seems likes there is a strange result for using half-precision vae decoder if batchsize>1
             image = np.concatenate(
                 [self.vae_decoder(latent_sample=latents[i : i + 1])[0] for i in range(latents.shape[0])]
